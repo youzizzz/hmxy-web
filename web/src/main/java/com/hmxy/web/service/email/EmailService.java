@@ -1,4 +1,4 @@
-package com.hmxy.web.service;
+package com.hmxy.web.service.email;
 
 /**
  * 邮箱服务
@@ -12,5 +12,5 @@ public interface EmailService {
      * @param title 标题
      * @param verCode 验证码
      */
-    void sendEmail(String to,String title,String verCode);
+    void sendEmail(String to, String title, String verCode);
 }

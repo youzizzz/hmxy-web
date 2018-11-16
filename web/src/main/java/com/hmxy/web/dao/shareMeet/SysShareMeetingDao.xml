@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hmxy.web.dao.shareMeet.SysShareMeetingDao" >
+  <resultMap id="BaseResultMap" type="com.hmxy.dto.ShareMeetDTO" >
+    <id column="sm_id" property="smId" jdbcType="VARCHAR" />
+    <result column="creator_by" property="creatorBy" jdbcType="VARCHAR" />
+    <result column="creator_date" property="creatorDate" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="category_id" property="categoryId" jdbcType="VARCHAR" />
+    <result column="detail_id" property="detailId" jdbcType="VARCHAR" />
+    <result column="area_id" property="areaId" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="logo_url" property="logoUrl" jdbcType="VARCHAR" />
+    <result column="share_start_time" property="shareStartTime" jdbcType="TIMESTAMP" />
+    <result column="share_id" property="shareId" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="share_end_time" property="shareEndTime" jdbcType="TIMESTAMP" />
+    <result column="charge" property="charge" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sm_id, creator_by, creator_date, update_by, update_date, category_id, detail_id, 
+    area_id, title, logo_url, share_start_time, share_id, status, share_end_time, charge
+  </sql>
+  <select id="shareMeetList" resultMap="BaseResultMap" parameterType="Map" >
+    select  t.*
+    from sys_share_meeting t
+    where 1=1
+    <if test="title != null and title != ''">
+      and t.title  LIKE concat('%',#{title},'%')
+    </if>
+    <if test="status != null and status != ''">
+      and t.status = #{status}
+    </if>
+  ORDER BY t.creator_date desc limit #{pageStart},#{pageSize}
+  </select>
+
+
+
+</mapper>

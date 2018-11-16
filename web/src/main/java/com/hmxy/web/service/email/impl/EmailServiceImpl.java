@@ -1,6 +1,6 @@
-package com.hmxy.web.service.impl;
+package com.hmxy.web.service.email.impl;
 
-import com.hmxy.web.service.EmailService;
+import com.hmxy.web.service.email.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;

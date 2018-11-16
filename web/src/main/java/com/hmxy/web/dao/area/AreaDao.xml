@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hmxy.web.dao.area.AreaDao">
+    <resultMap id="BaseResultMap" type="com.hmxy.dto.AreaDTO">
+
+        <id column="are_id" jdbcType="VARCHAR" property="areId"/>
+        <result column="creator_by" jdbcType="VARCHAR" property="creatorBy"/>
+        <result column="creator_date" jdbcType="TIMESTAMP" property="creatorDate"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="city_code" jdbcType="VARCHAR" property="cityCode"/>
+        <result column="city_name" jdbcType="VARCHAR" property="cityName"/>
+        <result column="province_code" jdbcType="VARCHAR" property="provinceCode"/>
+        <result column="province_name" jdbcType="VARCHAR" property="provinceName"/>
+        <result column="status" jdbcType="CHAR" property="status"/>
+    </resultMap>
+
+    <sql id="areaPublicSql">
+          select a.* from sys_area a
+    </sql>
+
+    <!-- 查询全部 -->
+    <select id="areaList" parameterType="java.util.Map" resultMap="BaseResultMap">
+      <include refid="areaPublicSql"></include>
+        where 1 = 1
+        <if test="null!= provinceCode and ''!= provinceCode">
+            AND a.province_code=#{provinceCode}
+        </if>
+        <if test="null!= provinceName and ''!= provinceName">
+            AND a.province_name=#{provinceName}
+        </if>
+        <if test="null!= cityCode and ''!= cityCode">
+            AND a.city_code=#{cityCode}
+        </if>
+        <if test="null!= cityName and ''!= cityName">
+            AND a.city_name=#{cityName}
+        </if>
+        <if test="''!= status and null!=status">
+            AND a.status=#{status}
+        </if>
+        limit #{pageStart},#{pageSize}
+    </select>
+
+    <!-- 校验城市是否存在 -->
+    <select id="checkCityExists" parameterType="com.hmxy.dto.AreaDTO" resultType="java.lang.Integer">
+    select count(1) from sys_area a where a.city_code=#{cityCode} and a.city_name=#{cityName} and are_id!=#{areId} and a.status=#{status}
+  </select>
+
+    <!-- 新增一条城市记录 -->
+    <insert id="addCity" parameterType="com.hmxy.dto.AreaDTO">
+    insert into sys_area(are_id,city_code,city_name,province_code,province_name,creator_by,creator_date,update_by,update_date,status) values
+    (#{areId},#{cityCode},#{cityName},#{provinceCode},#{provinceName},#{creatorBy},#{creatorDate},#{updateBy},#{updateDate},#{status})
+    </insert>
+
+    <!-- 城市状态修改 -->
+    <update id="updateCity" parameterType="com.hmxy.dto.AreaDTO">
+
+        update sys_area set update_by=#{updateBy},update_date=#{updateDate}
+
+        <if test="null != cityCode and '' != cityCode">
+            ,city_code=#{cityCode}
+        </if>
+        <if test="null != cityName and '' != cityName">
+            ,city_name=#{cityName}
+        </if>
+        <if test="null != provinceCode and '' != provinceCode">
+            ,province_code=#{provinceCode}
+        </if>
+        <if test="null != provinceName and '' != provinceName">
+            ,province_name=#{provinceName}
+        </if>
+        <if test="status !=''">
+            ,status=#{status}
+        </if>
+        where are_id=#{areId}
+    </update>
+
+    <!-- 根据ID查询一个地址信息 -->
+    <select id="findOneArea" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <include refid="areaPublicSql"></include>
+        where are_id = #{areId}
+    </select>
+</mapper>

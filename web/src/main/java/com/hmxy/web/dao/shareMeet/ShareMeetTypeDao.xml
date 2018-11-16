@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hmxy.web.dao.shareMeet.ShareMeetTypeDao">
+  <resultMap id="BaseResultMap" type="com.hmxy.dto.ClassIficationDTO">
+
+    <id column="cf_id" jdbcType="VARCHAR" property="cfId" />
+    <result column="creator_by" jdbcType="VARCHAR" property="creatorBy" />
+    <result column="creator_date" jdbcType="TIMESTAMP" property="creatorDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="status" jdbcType="CHAR" property="status" />
+  </resultMap>
+
+  <select id="shareMeetTypeList" parameterType="Map" resultMap="BaseResultMap">
+    select t.* from sys_classification t
+    where 1 = 1
+    <if test="categoryName != null and categoryName != ''">
+      and t.category_name  LIKE concat('%',#{categoryName},'%')
+    </if>
+    <if test="status != null and status != ''">
+      and t.status = #{status}
+    </if>
+    ORDER BY t.creator_date desc
+
+  </select>
+
+  <insert id="shareMeetTypeAdd" parameterType="com.hmxy.dto.ClassIficationDTO">
+    insert into sys_classification
+    (cf_id,creator_by,creator_date,update_by,update_date,category_name,status)
+    values
+    (#{cfId},#{creatorBy},#{creatorDate},#{updateBy},#{updateDate},#{categoryName},#{status})
+  </insert>
+
+  <update id="shareMeetTypeUpdate" parameterType="com.hmxy.dto.ClassIficationDTO">
+    update sys_classification t
+    <set>
+      <if test="creatorBy != null" >
+        t.creator_by = #{creatorBy},
+      </if>
+      <if test="creatorDate != null" >
+        t.update_by = #{creatorDate},
+      </if>
+      <if test="updateBy != null" >
+        t.creator_by = #{updateBy},
+      </if>
+      <if test="updateDate != null" >
+        t.update_date = #{updateDate},
+      </if>
+      <if test="categoryName != null" >
+        t.category_name = #{categoryName},
+      </if>
+      <if test="status != null" >
+        t.status = #{status},
+      </if>
+    </set>
+    where t.cf_id = #{cfId}
+  </update>
+
+
+  <select id="getShareMeetTypeById"  parameterType="String" resultMap="BaseResultMap">
+    select t.* from sys_classification t
+    where t.cf_id = #{cfId}
+  </select>
+
+</mapper>
