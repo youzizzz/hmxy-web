@@ -23,7 +23,7 @@ public interface UserService {
      * @param userInfoDTO
      * @return
      */
-    Response<String> register(UserInfoDTO userInfoDTO);
+    Response<String> register(UserInfoDTO userInfoDTO,String verifyCode);
 
     /**
      * 登录

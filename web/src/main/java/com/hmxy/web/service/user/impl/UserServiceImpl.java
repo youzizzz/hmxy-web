@@ -10,6 +10,7 @@ import com.hmxy.util.MD5Util;
 import com.hmxy.util.RedisUtil;
 import com.hmxy.web.dao.user.UserDao;
 import com.hmxy.web.service.user.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Response<String> register(UserInfoDTO userInfoDTO) {
+    public Response<String> register(UserInfoDTO userInfoDTO,String verifyCode) {
+        if(StringUtils.isBlank(userInfoDTO.getEmail())){
+            return new Response<String>().setMessage("邮箱不能为空!").setStatusCode(HttpStatusEnum.error.getCode());
+        }
+        if(StringUtils.isBlank(verifyCode)){
+            return new Response<String>().setMessage("验证码不能为空!").setStatusCode(HttpStatusEnum.error.getCode());
+        }
+        if(StringUtils.isBlank(userInfoDTO.getPassword())){
+            return new Response<String>().setMessage("密码不能为空!").setStatusCode(HttpStatusEnum.error.getCode());
+        }
+        //获取redis中对应的的验证码
+        String verCode = (String) redisUtil.get(userInfoDTO.getEmail());
+        if(StringUtils.isBlank(verCode)){
+            return new Response<String>().setMessage("验证码已失效!").setStatusCode(HttpStatusEnum.error.getCode());
+        }
+        if(verCode!=verifyCode){
+            return new Response<String>().setMessage("验证码错误!").setStatusCode(HttpStatusEnum.error.getCode());
+        }
         //密码md5加密
         String password = MD5Util.MD5(userInfoDTO.getPassword());
         userInfoDTO.setPassword(password);

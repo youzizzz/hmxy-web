@@ -31,8 +31,8 @@ public class UserController {
     }
 
     @RequestMapping("/register")
-    public Response<String> register(UserInfoDTO userInfoDTO){
-        return userService.register(userInfoDTO);
+    public Response<String> register(UserInfoDTO userInfoDTO,String verifyCode){
+        return userService.register(userInfoDTO,verifyCode);
     }
 
 }

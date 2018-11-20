@@ -9,6 +9,7 @@ import com.hmxy.web.service.email.EmailService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.TimeUnit;
@@ -18,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  * @author: liangj
  * @date: 2018/11/20 15:26
  */
-@RequestMapping("/index")
+@RequestMapping("")
 @RestController
 public class IndexController {
 
@@ -30,7 +31,7 @@ public class IndexController {
     @Autowired
     private RedisUtil redisUtil;
 
-    @RequestMapping("/sendEmail")
+    @RequestMapping(value = "/sendEmail",method = RequestMethod.POST)
     public Response<String> sendEmail(String email){
         String verCode = UUIDUtil.generateUUID().substring(0,6);
         try{
