@@ -1,10 +1,7 @@
 package com.hmxy.web.service.user.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.hmxy.dto.UserInfoDTO;
 import com.hmxy.http.HttpStatusEnum;
 import com.hmxy.http.Response;
@@ -64,15 +61,14 @@ public class UserServiceImpl implements UserService {
         List<UserInfoDTO> list = new ArrayList<UserInfoDTO>();
         list = userDao.login(userInfoDTO);
         if(null!=list&&list.size()==1){
-            return new Response<String>().setMessage("登录成功!").setStatusCode(HttpStatusEnum.success.getCode());
-
-            try{
-                ObjectMapper objectMapper = new ObjectMapper();
+            ObjectMapper objectMapper=new ObjectMapper();
+            try {
                 String userString=objectMapper.writeValueAsString(userInfoDTO);
-            }catch (Exception e){
-
+                redisUtil.set(userInfoDTO.getUserId(),userString,30L, TimeUnit.MINUTES);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
             }
-     //       redisUtil.set(userInfoDTO.getUserId(),userString,30L, TimeUnit.MINUTES);
+            return new Response<String>().setMessage("登录成功!").setStatusCode(HttpStatusEnum.success.getCode());
         }
         return new Response<String>().setMessage("账号或者密码错误!").setStatusCode(HttpStatusEnum.success.getCode());
     }
