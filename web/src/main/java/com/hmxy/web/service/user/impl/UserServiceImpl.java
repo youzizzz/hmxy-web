@@ -5,10 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hmxy.dto.UserInfoDTO;
 import com.hmxy.http.HttpStatusEnum;
 import com.hmxy.http.Response;
+import com.hmxy.util.LogUtil;
 import com.hmxy.util.MD5Util;
 import com.hmxy.util.RedisUtil;
 import com.hmxy.web.dao.user.UserDao;
 import com.hmxy.web.service.user.UserService;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,8 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class UserServiceImpl implements UserService {
 
+    private static final Logger log = LogUtil.getLogger(UserServiceImpl.class);
+
     @Autowired
     private UserDao userDao;
 
@@ -35,6 +39,7 @@ public class UserServiceImpl implements UserService {
         int count = 0;
         count = userDao.checkUserNameExists(userInfoDTO);
         if(count>=1){
+            log.error("此邮箱已经是验证邮箱,不可再次校验!");
             return new Response<String>().setMessage("此邮箱已经是验证邮箱,不可再次校验!").setStatusCode(HttpStatusEnum.error.getCode());
         }
         return new Response<String>().setMessage("此邮箱可用作验证邮箱").setStatusCode(HttpStatusEnum.success.getCode());
@@ -48,6 +53,7 @@ public class UserServiceImpl implements UserService {
         int count = 0;
         count = userDao.saveUser(userInfoDTO);
         if(count<1){
+            log.error("系统异常,注册失败!");
             return new Response<String>().setMessage("系统异常,注册失败!").setStatusCode(HttpStatusEnum.error.getCode());
         }
         return new Response<String>().setMessage("注册成功!").setStatusCode(HttpStatusEnum.success.getCode());
@@ -70,6 +76,7 @@ public class UserServiceImpl implements UserService {
             }
             return new Response<String>().setMessage("登录成功!").setStatusCode(HttpStatusEnum.success.getCode());
         }
+        log.error("账号或者密码错误!");
         return new Response<String>().setMessage("账号或者密码错误!").setStatusCode(HttpStatusEnum.success.getCode());
     }
 }
