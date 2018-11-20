@@ -31,12 +31,21 @@ public class MainApplication {
         SpringApplication.run(MainApplication.class, args);
     }
 
+    /**
+     * 数据源
+     * @return
+     */
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource dataSource() {
         return new DataSource();
     }
 
+    /**
+     * session工厂
+     * @return
+     * @throws Exception
+     */
     @Bean
     public SqlSessionFactory sqlSessionFactoryBean() throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();

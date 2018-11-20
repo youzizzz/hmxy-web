@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hmxy.manager.dao.user.UserDao">
+  <resultMap id="BaseResultMap" type="com.hmxy.dto.UserInfoDTO">
+
+    <id column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="creator_by" jdbcType="VARCHAR" property="creatorBy" />
+    <result column="creator_date" jdbcType="TIMESTAMP" property="creatorDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="user_decription" jdbcType="VARCHAR" property="userDecription" />
+    <result column="certificateCode" jdbcType="VARCHAR" property="certificateCode" />
+    <result column="birthDate" jdbcType="VARCHAR" property="birthDate" />
+    <result column="jobName" jdbcType="VARCHAR" property="jobName" />
+    <result column="sex" jdbcType="CHAR" property="sex" />
+    <result column="status" jdbcType="CHAR" property="status" />
+
+  </resultMap>
+
+  <!-- 公共查询 -->
+  <sql id="selectUserPrefix">
+    SELECT u.* from sys_user u
+  </sql>
+
+
+  <!-- 登录 -->
+  <select id="login" parameterType="com.hmxy.dto.UserInfoDTO" resultMap="BaseResultMap">
+    <include refid="selectUserPrefix"></include>
+     where email=#{email} and password=#{password} and status=#{status}
+  </select>
+
+
+  <!--新增用户信息  -->
+  <insert id="saveUser" parameterType="com.hmxy.dto.UserInfoDTO">
+    INSERT INTO `mybook`.`sys_user`(`creator_by`, `creator_date`, `update_by`, `update_date`, `user_id`, `username`, `password`, `phone`, `email`, `address`,
+     `user_decription`, `status`,`certificateCode`, `birthDate`, `sex`, `jobName`) VALUES
+     (#{creatorBy},#{creatorDate},#{updateBy},#{updateDate},#{userId},#{username}, #{password},
+      #{phone}, #{email}, #{address},#{userDecription},#{status}, #{certificateCode}, #{birthDate}, #{sex}, #{jobName});
+  </insert>
+
+  <!-- 校验邮箱是否存在 -->
+  <select id="checkUserNameExists" parameterType="com.hmxy.dto.UserInfoDTO" resultType="java.lang.Integer">
+    select count(1) from sys_user su where su.email=#{email} and su.status=#{status} and su.user_id!=#{userId}
+  </select>
+
+</mapper>

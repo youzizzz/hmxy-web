@@ -29,6 +29,12 @@
     <if test="title != null and title != ''">
       and t.title  LIKE concat('%',#{title},'%')
     </if>
+    <if test="categoryId != null and categoryId != ''">
+      and category_id=#{categoryId}
+    </if>
+    <if test="areaId!=null and areaId != ''">
+      and area_id=#{areaId}
+    </if>
     <if test="status != null and status != ''">
       and t.status = #{status}
     </if>
