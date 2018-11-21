@@ -45,9 +45,12 @@ public class CROSInteceptor implements HandlerInterceptor {
         /**
          * POST请求跨域处理
          */
+        logger.info("看这里:"+request.getMethod());
+        logger.info("看这里:"+request.getMethod());
         if ("OPTIONS".equals(request.getMethod())) {
             response.setHeader("Access-Control-Allow-Methods", "*");
             response.setHeader("Access-Control-Allow-Headers", "*");
+            response.setHeader("Access-Control-Allow-Origin","*");
             return true;
         }
         response.setHeader("Access-Control-Allow-Origin","*");

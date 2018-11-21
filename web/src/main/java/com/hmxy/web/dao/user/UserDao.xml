@@ -45,7 +45,10 @@
 
   <!-- 校验邮箱是否存在 -->
   <select id="checkUserNameExists" parameterType="com.hmxy.dto.UserInfoDTO" resultType="java.lang.Integer">
-    select count(1) from sys_user su where su.email=#{email} and su.status=#{status} and su.user_id!=#{userId}
+    select count(1) from sys_user su where su.email=#{email} and su.status=#{status}
+    <if test="userId!=null and userId!=''">
+      and su.user_id!=#{userId}
+    </if>
   </select>
 
 </mapper>

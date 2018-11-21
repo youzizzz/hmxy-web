@@ -3,11 +3,13 @@ package com.hmxy.web.service.user.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hmxy.dto.UserInfoDTO;
+import com.hmxy.enums.ObjectEnum;
 import com.hmxy.http.HttpStatusEnum;
 import com.hmxy.http.Response;
 import com.hmxy.util.LogUtil;
 import com.hmxy.util.MD5Util;
 import com.hmxy.util.RedisUtil;
+import com.hmxy.util.UUIDUtil;
 import com.hmxy.web.dao.user.UserDao;
 import com.hmxy.web.service.user.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -38,6 +41,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Response<String> checkMailbox(UserInfoDTO userInfoDTO) {
         int count = 0;
+        userInfoDTO.setStatus(String.valueOf(ObjectEnum.effective.getStatus()));
         count = userDao.checkUserNameExists(userInfoDTO);
         if(count>=1){
             log.error("此邮箱已经是验证邮箱,不可再次校验!");
@@ -62,12 +66,20 @@ public class UserServiceImpl implements UserService {
         if(StringUtils.isBlank(verCode)){
             return new Response<String>().setMessage("验证码已失效!").setStatusCode(HttpStatusEnum.error.getCode());
         }
-        if(verCode!=verifyCode){
+        if(!verCode.equals(verifyCode)){
             return new Response<String>().setMessage("验证码错误!").setStatusCode(HttpStatusEnum.error.getCode());
         }
         //密码md5加密
         String password = MD5Util.MD5(userInfoDTO.getPassword());
+        String uuid = UUIDUtil.generateUUID();
+        Date date = new Date();
         userInfoDTO.setPassword(password);
+        userInfoDTO.setUserId(uuid);
+        userInfoDTO.setCreatorBy(uuid);
+        userInfoDTO.setUpdateBy(uuid);
+        userInfoDTO.setCreatorDate(date);
+        userInfoDTO.setUpdateDate(date);
+        userInfoDTO.setStatus(String.valueOf(ObjectEnum.effective.getStatus()));
         int count = 0;
         count = userDao.saveUser(userInfoDTO);
         if(count<1){
@@ -82,6 +94,7 @@ public class UserServiceImpl implements UserService {
         //密码md5加密
         String password = MD5Util.MD5(userInfoDTO.getPassword());
         userInfoDTO.setPassword(password);
+        userInfoDTO.setStatus(String.valueOf(ObjectEnum.effective.getStatus()));
         List<UserInfoDTO> list = new ArrayList<UserInfoDTO>();
         list = userDao.login(userInfoDTO);
         if(null!=list&&list.size()==1){

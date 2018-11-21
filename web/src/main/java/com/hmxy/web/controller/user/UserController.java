@@ -5,6 +5,7 @@ import com.hmxy.http.Response;
 import com.hmxy.web.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -30,7 +31,7 @@ public class UserController {
         return userService.login(userInfoDTO);
     }
 
-    @RequestMapping("/register")
+    @RequestMapping(value = "/register",method = RequestMethod.POST)
     public Response<String> register(UserInfoDTO userInfoDTO,String verifyCode){
         return userService.register(userInfoDTO,verifyCode);
     }
