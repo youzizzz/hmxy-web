@@ -86,6 +86,8 @@ public class UserServiceImpl implements UserService {
             log.error("系统异常,注册失败!");
             return new Response<String>().setMessage("系统异常,注册失败!").setStatusCode(HttpStatusEnum.error.getCode());
         }
+        //删除redis中对应的的验证码
+        redisUtil.del(userInfoDTO.getEmail());
         return new Response<String>().setMessage("注册成功!").setStatusCode(HttpStatusEnum.success.getCode());
     }
 
