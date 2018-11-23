@@ -21,7 +21,7 @@ public interface MessageService {
      * @param pageInfoResult
      * @return
      */
-    PageInfo<MessageDTO> MessageListPage(PageInfo<MessageDTO> pageInfoResult, MessageDTO messageDTO);
+    PageInfo<MessageDTO> feedBackListPage(PageInfo<MessageDTO> pageInfoResult, MessageDTO messageDTO);
 
     /**
      * 根据ID获取一条Message
@@ -56,7 +56,7 @@ public interface MessageService {
      * @param messageDTO
      * @return
      */
-    List<MessageDTO> messageList(MessageDTO messageDTO);
+    List<MessageDTO> feedBackList(MessageDTO messageDTO);
 
     /**
      * 用户反馈

@@ -1,92 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hmxy.web.dao.message.MessageDao">
-  <resultMap id="BaseResultMap" type="com.hmxy.dto.MessageDTO">
+    <resultMap id="BaseResultMap" type="com.hmxy.dto.MessageDTO">
 
-    <id column="message_id" jdbcType="VARCHAR" property="messageId" />
-    <result column="creator_by" jdbcType="VARCHAR" property="creatorBy" />
-    <result column="creator_date" jdbcType="TIMESTAMP" property="creatorDate" />
-    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
-    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
-    <result column="message_title" jdbcType="VARCHAR" property="messageTitle" />
-    <result column="message_content" jdbcType="VARCHAR" property="messageContent" />
-    <result column="message_type" jdbcType="CHAR" property="messageType" />
-    <result column="message_read" jdbcType="CHAR" property="messageRead" />
-    <result column="status" jdbcType="CHAR" property="status" />
-  </resultMap>
+        <id column="message_id" jdbcType="VARCHAR" property="messageId"/>
+        <result column="creator_by" jdbcType="VARCHAR" property="creatorBy"/>
+        <result column="creator_date" jdbcType="TIMESTAMP" property="creatorDate"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="message_title" jdbcType="VARCHAR" property="messageTitle"/>
+        <result column="message_content" jdbcType="VARCHAR" property="messageContent"/>
+        <result column="message_type" jdbcType="CHAR" property="messageType"/>
+        <result column="message_read" jdbcType="CHAR" property="messageRead"/>
+        <result column="status" jdbcType="CHAR" property="status"/>
+    </resultMap>
 
-  <!-- message模块复用SQL -->
-  <sql id="messagePublicSql">
+    <!-- message模块复用SQL -->
+    <sql id="messagePublicSql">
      select m.* from sys_message m
   </sql>
 
-  <!-- 按条件查询所有Message -->
-  <select id="messageList"  resultMap="BaseResultMap">
-   <include refid="messagePublicSql"></include>
-    where 1 = 1
-    <if test="null!= status and '' != status">
-      and status=#{status}
-    </if>
-    <if test="null!= messageType and ''!= messageType">
-      and message_type=#{messageType}
-    </if>
-    <if test="null!= messageRead and ''!= messageRead">
-      and message_read=#{messageRead}
-    </if>
-    <if test="null!= messageTitle and ''!= messageTitle">
-      and message_title=#{messageTitle}
-    </if>
-    <if test="null!= creatorBy and ''!= creatorBy">
-      and creator_by=#{creatorBy}
-    </if>
-     order by m.update_date desc
-  </select>
+    <!-- 按条件查询所有Message -->
+    <select id="messageList" resultMap="BaseResultMap">
+        <include refid="messagePublicSql"></include>
+        where 1 = 1
+        <if test="null!= status and '' != status">
+            and status=#{status}
+        </if>
+        <if test="null!= messageType and ''!= messageType">
+            and message_type=#{messageType}
+        </if>
+        <if test="null!= messageRead and ''!= messageRead">
+            and message_read=#{messageRead}
+        </if>
+        <if test="null!= messageTitle and ''!= messageTitle">
+            and message_title=#{messageTitle}
+        </if>
+        <if test="null!= creatorBy and ''!= creatorBy">
+            and creator_by=#{creatorBy}
+        </if>
+        order by m.update_date desc
+    </select>
 
-  <!-- 根据获得所有消息 -->
-  <select id="findMessageById" parameterType="java.lang.String" resultMap="BaseResultMap">
-  <include refid="messagePublicSql"></include> where m.message_id=#{messageId}
-  </select>
+    <!-- 按条件查询所有反馈信息 -->
+    <select id="feedBackList"  resultMap="BaseResultMap">
+        <include refid="messagePublicSql"></include>
+        where 1 = 1
+        <if test="null!= status and '' != status">
+            and status=#{status}
+        </if>
+        <if test="null!= messageType and ''!= messageType">
+            and message_type=#{messageType}
+        </if>
+        <if test="null!= messageRead and ''!= messageRead">
+            and message_read=#{messageRead}
+        </if>
+        <if test="null!= messageTitle and ''!= messageTitle">
+            and message_title=#{messageTitle}
+        </if>
+        <if test="null!= creatorBy and ''!= creatorBy">
+            and creator_by=#{creatorBy}
+        </if>
+        and message_type in ('1','2')
+        order by m.update_date desc
+    </select>
 
-  <!-- 新增保存一个消息 -->
-  <insert id="saveMessage" parameterType="com.hmxy.dto.MessageDTO">
+    <!-- 根据获得所有消息 -->
+    <select id="findMessageById" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <include refid="messagePublicSql"></include>
+        where m.message_id=#{messageId}
+    </select>
+
+    <!-- 新增保存一个消息 -->
+    <insert id="saveMessage" parameterType="com.hmxy.dto.MessageDTO">
    insert into sys_message(message_id,message_title,message_content,message_type,message_read,status,creator_by,creator_date,update_by,update_date) values
    (#{messageId},#{messageTitle},#{messageContent},#{messageType},#{messageRead},#{status},#{creatorBy},#{creatorDate},#{updateBy},#{updateDate})
   </insert>
 
-  <!-- 更新一条消息 -->
-  <update id="updateMessage" parameterType="com.hmxy.dto.MessageDTO">
-    update sys_message set update_by=#{updateBy},update_date=#{updateDate}
+    <!-- 更新一条消息 -->
+    <update id="updateMessage" parameterType="com.hmxy.dto.MessageDTO">
+        update sys_message set update_by=#{updateBy},update_date=#{updateDate}
 
-    <if test="null != messageTitle and '' != messageTitle">
-      ,message_title=#{messageTitle}
-    </if>
-    <if test="null != messageContent and '' != messageContent">
-      ,message_content=#{messageContent}
-    </if>
-    <if test="null != messageType and '' != messageType">
-      ,message_type=#{messageType}
-    </if>
-    <if test="null != messageRead and '' != messageRead">
-      ,message_read=#{messageRead}
-    </if>
-    <if test="null != status and '' != status">
-      ,status=#{status}
-    </if>
-    where message_id=#{messageId}
+        <if test="null != messageTitle and '' != messageTitle">
+            ,message_title=#{messageTitle}
+        </if>
+        <if test="null != messageContent and '' != messageContent">
+            ,message_content=#{messageContent}
+        </if>
+        <if test="null != messageType and '' != messageType">
+            ,message_type=#{messageType}
+        </if>
+        <if test="null != messageRead and '' != messageRead">
+            ,message_read=#{messageRead}
+        </if>
+        <if test="null != status and '' != status">
+            ,status=#{status}
+        </if>
+        where message_id=#{messageId}
 
-  </update>
+    </update>
 
-  <!-- 更新一条消息 -->
-  <update id="batchUpdateMessage" parameterType="java.util.Map">
-    update sys_message set update_by=#{updateBy},update_date=#{updateDate}
-    <if test="'' != status">
-      ,message_read=#{status}
-    </if>
-    where message_id in
-    <foreach collection="messageIds" item="messageId" index="index" open="(" separator="," close=")"  >
-        #{messageId}
-    </foreach>
+    <!-- 更新一条消息 -->
+    <update id="batchUpdateMessage" parameterType="java.util.Map">
+        update sys_message set update_by=#{updateBy},update_date=#{updateDate}
+        <if test="'' != status">
+            ,message_read=#{status}
+        </if>
+        where message_id in
+        <foreach collection="messageIds" item="messageId" index="index" open="(" separator="," close=")">
+            #{messageId}
+        </foreach>
 
-  </update>
+    </update>
 
 </mapper>

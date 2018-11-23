@@ -33,7 +33,7 @@ public class MessageServiceImpl implements MessageService {
     private MessageDao messageDao;
 
     @Override
-    public PageInfo<MessageDTO> MessageListPage(PageInfo<MessageDTO> pageInfoResult, MessageDTO messageDTO) {
+    public PageInfo<MessageDTO> feedBackListPage(PageInfo<MessageDTO> pageInfoResult, MessageDTO messageDTO) {
         PageHelper.startPage(pageInfoResult.getPageNum(), pageInfoResult.getPageSize());
         Map<String, Object> paramMap = null;
 
@@ -44,7 +44,7 @@ public class MessageServiceImpl implements MessageService {
         }
 
         List<MessageDTO> list = new ArrayList<MessageDTO>();
-        list = messageDao.messageList(paramMap);
+        list = messageDao.feedBackList(paramMap);
         Page<MessageDTO> page = (Page) list;
         return PageUtils.convertPage(page);
     }
@@ -109,7 +109,7 @@ public class MessageServiceImpl implements MessageService {
      * @return
      */
     @Override
-    public List<MessageDTO> messageList(MessageDTO messageDTO) {
+    public List<MessageDTO> feedBackList(MessageDTO messageDTO) {
         Map<String, Object> paramMap = null;
 
         //实体对象转成请求map
@@ -119,7 +119,7 @@ public class MessageServiceImpl implements MessageService {
         }
 
         List<MessageDTO> list = new ArrayList<MessageDTO>();
-        list = messageDao.messageList(paramMap);
+        list = messageDao.feedBackList(paramMap);
         return list;
     }
 

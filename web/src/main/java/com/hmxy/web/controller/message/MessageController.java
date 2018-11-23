@@ -29,8 +29,8 @@ public class MessageController {
     private MessageService messageService;
 
     /**
-     * 信息类型分页查询
-     * @author tangyouzhi
+     * 反馈信息信息分页查询
+     * @author liangj
      * @param messageDTO
      * @param page
      * @param limit
@@ -38,31 +38,32 @@ public class MessageController {
      */
     @RequestMapping(value = "/listPage",method = RequestMethod.GET)
     @ResponseBody
-    public PageInfo<MessageDTO> messageListPage(MessageDTO messageDTO, int page, int limit){
+    public PageInfo<MessageDTO> feedBackListPage(MessageDTO messageDTO, int page, int limit){
         PageInfo<MessageDTO> pageInfoResult = new PageInfo<MessageDTO>();
         pageInfoResult.setPageNum(page);
         pageInfoResult.setPageSize(limit);
-        pageInfoResult = messageService.MessageListPage(pageInfoResult,messageDTO);
+        pageInfoResult = messageService.feedBackListPage(pageInfoResult,messageDTO);
         pageInfoResult.setCode("0");
         return pageInfoResult;
     }
 
     /**
      * 信息查询
-     * @author tangyouzhi
+     * @author liangj
      * @param messageDTO
      * @return
      */
     @RequestMapping(value = "/list",method = RequestMethod.GET)
     @ResponseBody
-    public List<MessageDTO> messageList(MessageDTO messageDTO){
+    public List<MessageDTO> feedBackList(MessageDTO messageDTO){
         List<MessageDTO> list = new ArrayList<MessageDTO>();
-        list = messageService.messageList(messageDTO);
+        list = messageService.feedBackList(messageDTO);
         return list;
     }
 
     /**
      * 用户反馈
+     * @author liangj
      * @param messageDTO
      * @return
      */
@@ -74,6 +75,7 @@ public class MessageController {
 
     /**
      * 根据messageId获取一条message
+     * @author liangj
      * @param messageId
      * @return
      */

@@ -48,4 +48,11 @@ public interface MessageDao {
      * @return
      */
     Integer batchUpdateMessage(Map<String, Object> map);
+
+    /**
+     * 按条件查询反馈信息
+     * @param paramMap
+     * @return
+     */
+    List<MessageDTO> feedBackList(Map<String, Object> paramMap);
 }
