@@ -25,19 +25,19 @@
         <include refid="messagePublicSql"></include>
         where 1 = 1
         <if test="null!= status and '' != status">
-            and status=#{status}
+            and m.status=#{status}
         </if>
         <if test="null!= messageType and ''!= messageType">
-            and message_type=#{messageType}
+            and m.message_type=#{messageType}
         </if>
         <if test="null!= messageRead and ''!= messageRead">
-            and message_read=#{messageRead}
+            and m.message_read=#{messageRead}
         </if>
         <if test="null!= messageTitle and ''!= messageTitle">
-            and message_title=#{messageTitle}
+            and m.message_title=#{messageTitle}
         </if>
         <if test="null!= creatorBy and ''!= creatorBy">
-            and creator_by=#{creatorBy}
+            and m.creator_by=#{creatorBy}
         </if>
         order by m.update_date desc
     </select>
@@ -47,21 +47,24 @@
         <include refid="messagePublicSql"></include>
         where 1 = 1
         <if test="null!= status and '' != status">
-            and status=#{status}
+            and m.status=#{status}
         </if>
         <if test="null!= messageType and ''!= messageType">
-            and message_type=#{messageType}
+            and m.message_type=#{messageType}
         </if>
         <if test="null!= messageRead and ''!= messageRead">
-            and message_read=#{messageRead}
+            and m.message_read=#{messageRead}
         </if>
         <if test="null!= messageTitle and ''!= messageTitle">
-            and message_title=#{messageTitle}
+            and m.message_title=#{messageTitle}
         </if>
         <if test="null!= creatorBy and ''!= creatorBy">
-            and creator_by=#{creatorBy}
+            and m.creator_by=#{creatorBy}
         </if>
-        and message_type in ('1','2')
+        <if test="null!= pointTime and ''!= pointTime">
+            and m.creator_date &lt;= STR_TO_DATE(#{pointTime},"%Y-%m-%d %H:%i:%s")
+        </if>
+        and m.message_type in ('1','2')
         order by m.update_date desc
     </select>
 

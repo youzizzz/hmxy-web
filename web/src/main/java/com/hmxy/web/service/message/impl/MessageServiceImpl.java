@@ -34,6 +34,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public PageInfo<MessageDTO> feedBackListPage(PageInfo<MessageDTO> pageInfoResult, MessageDTO messageDTO) {
+        messageDTO.setStatus(String.valueOf(ObjectEnum.effective.getStatus()));
         PageHelper.startPage(pageInfoResult.getPageNum(), pageInfoResult.getPageSize());
         Map<String, Object> paramMap = null;
 
@@ -110,6 +111,7 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public List<MessageDTO> feedBackList(MessageDTO messageDTO) {
+        messageDTO.setStatus(String.valueOf(ObjectEnum.effective.getStatus()));
         Map<String, Object> paramMap = null;
 
         //实体对象转成请求map
@@ -138,5 +140,9 @@ public class MessageServiceImpl implements MessageService {
         return new Response<String>().setStatusCode(HttpStatusEnum.success.getCode())
                 .setMessage(result > 0 ? "用户反馈成功" : "用户反馈失败")
                 .setData(result > 0 ? uuid : "error");
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Date());
     }
 }
