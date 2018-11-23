@@ -110,6 +110,6 @@ public class UserServiceImpl implements UserService {
             return new Response<String>().setMessage("登录成功!").setStatusCode(HttpStatusEnum.success.getCode());
         }
         log.error("账号或者密码错误!");
-        return new Response<String>().setMessage("账号或者密码错误!").setStatusCode(HttpStatusEnum.success.getCode());
+        return new Response<String>().setMessage("账号或者密码错误!").setStatusCode(HttpStatusEnum.error.getCode());
     }
 }

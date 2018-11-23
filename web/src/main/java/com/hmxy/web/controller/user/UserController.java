@@ -26,7 +26,7 @@ public class UserController {
         return userService.checkMailbox(userInfoDTO);
     }
 
-    @RequestMapping("/login")
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
     public Response<String> login(UserInfoDTO userInfoDTO){
         return userService.login(userInfoDTO);
     }
